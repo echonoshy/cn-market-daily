@@ -27,17 +27,23 @@ jobs:
           pip install -r requirements.txt
 
       - name: Fetch daily data
+        id: fetch
         run: |
-          python run.py
+          OUTPUT_PATH="$(python run.py)"
+          echo "output_path=${OUTPUT_PATH}" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push (if changed)
         run: |
-          if git diff --quiet; then
+          FILE="${{ steps.fetch.outputs.output_path }}"
+
+          git add "$FILE"
+
+          if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
-          git add market_daily/latest.json
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(data): update market daily"
           git push
+
