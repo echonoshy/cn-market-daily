@@ -42,7 +42,7 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          git config user.name "lake"
+          git config user.name "echonoshy"
           git config user.email "echonoshy@gmail.com"
           git commit -m "chore(data): update market daily"
           git push
